@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  app1: &app
+    build: .
+    hostname: app1
+    expose:
+      - '3001'
+    environment:
+      DB_CONNECTION_URL: 'mongodb://root:example@mongo:27017/'
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: asopdkq1qpk
+    deploy:
+      resources:
+        limits:
+          memory: '0.5GB'
+  app2:
+    <<: *app
+    hostname: app2
+
+  db:
+    image: postgres:latest
+    hostname: db
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=rex
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./script.sql:/docker-entrypoint-initdb.d/script.sql
