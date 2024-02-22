@@ -1,6 +1,11 @@
-import { User } from './User';
+import { Result } from 'src/@core/error/Result';
+import { AuthResponseDto } from '../dtos/AuthResponseDto';
+import { CreateUserDto } from '../dtos/CreateUserDto';
+import { LoginDto } from '../dtos/LoginDto';
 
 export interface IUserService {
-  login(): Promise<User | null>;
-  register(): Promise<User | null>;
+  login(loginDto: LoginDto): Promise<Result<AuthResponseDto> | null>;
+  register(
+    createUserDto: CreateUserDto,
+  ): Promise<Result<AuthResponseDto> | null>;
 }
