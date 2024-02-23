@@ -17,7 +17,7 @@ export class PetService {
       pet.name,
       pet.sex,
       pet.birthdate,
-      '',
+      pet.picture_url,
       pet.castrated,
       pet.specie_id,
     );
@@ -27,6 +27,7 @@ export class PetService {
   async listUserPets(userId: string) {
     return await this.petRepo.listUserPets(userId);
   }
-
-  private async savePetImage(picture_url: string) {}
+  async listSpecies() {
+    return await this.petRepo.listSpecies();
+  }
 }
