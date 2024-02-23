@@ -7,7 +7,7 @@ export class SavePetDto {
     name: string;
     sex: boolean;
     birthdate: Date;
-    picture: Blob;
+    picture_url: string;
     castrated: boolean;
     specie_id: string;
   };
@@ -19,7 +19,7 @@ export class SavePetDto {
       name: string;
       sex: boolean;
       birthdate: Date;
-      picture: Blob;
+      picture_url: string;
       castrated: boolean;
       specie_id: string;
     },

@@ -4,6 +4,7 @@ import { Pool, QueryResult } from 'pg';
 import { randomUUID } from 'crypto';
 import { Result } from 'src/@core/error/Result';
 import { Pet } from '../model/Pet';
+import { Specie } from '../model/Specie';
 
 export class PostgresPetRepository implements PetRepository {
   private readonly dbService: DbService;
@@ -17,6 +18,14 @@ export class PostgresPetRepository implements PetRepository {
       port: 5432,
       max: 20,
     });
+  }
+  async listSpecies(): Promise<Result<Specie[]>> {
+    const select = `SELECT * FROM "Species"`;
+
+    const { rows: species }: QueryResult<Specie> =
+      await this.dbService.query(select);
+
+    return Result.ok<Specie[]>(species);
   }
 
   async savePet(pet: Pet, userId: string): Promise<Result<Pet>> {
