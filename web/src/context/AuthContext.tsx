@@ -48,6 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (res.data.message) {
             return;
         }
+        console.log(res);
         window.location.href = "http://localhost:3000";
     };
 

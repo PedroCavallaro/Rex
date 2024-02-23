@@ -22,7 +22,7 @@ export default function page({ params }: { params: { type: AuthType } }) {
                     height={500}
                     alt=""
                     loading="eager"
-                    className="fixed top-0 z-10 w-[100dvw]"
+                    className="fixed top-0 z-10 w-[100dvw] lg:w-[60dvw] right-0"
                 />
                 <div className="px-4 py-6 rounded-md  border-opacity-50 text-black  shadow-2xl bg-[#e6e4e4] z-30">
                     <h2 className="text-2xl font-light  mb-5">{title}</h2>
