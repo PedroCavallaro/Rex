@@ -59,6 +59,7 @@ export function AuthForm({ type }: { type: AuthType }) {
 
             <Input
                 id="password"
+                type="password"
                 {...register("password")}
                 errors={errors.password?.message}
                 placeholder="Senha"
