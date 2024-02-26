@@ -5,11 +5,12 @@ import { forwardRef, useState } from "react";
 
 interface MediaPickerProps {
     errors?: string;
+    onChange: (file: File) => any;
 }
 
 // eslint-disable-next-line react/display-name
 export const MediaPicker = forwardRef<HTMLInputElement, MediaPickerProps>(
-    ({ errors }, ref) => {
+    ({ errors, onChange }, ref) => {
         const [imagePreview, setImagePreview] = useState<string>();
         return (
             <>
@@ -21,17 +22,18 @@ export const MediaPicker = forwardRef<HTMLInputElement, MediaPickerProps>(
                         <input
                             type="file"
                             id="image"
-                            name="picture_url"
                             ref={ref}
                             onChange={(e) => {
                                 const files = e.currentTarget.files;
                                 if (files) {
+                                    console.log(files[0]);
                                     setImagePreview(
                                         (prev) =>
                                             (prev = URL.createObjectURL(
                                                 files[0]
                                             ))
                                     );
+                                    onChange && onChange(files[0]);
                                 }
                             }}
                             className="hidden absolute"
