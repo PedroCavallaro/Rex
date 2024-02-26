@@ -8,6 +8,7 @@ type User = {
 };
 export const getUser = () => {
     const { token } = parseCookies();
+    console.log(token);
     if (token) {
         try {
             const decodedToken: User = jwt.verify(token, "asdasd") as User;

@@ -7,7 +7,7 @@ export type Pet = {
     birthdate: Date;
     picture_url: string;
     castrated: boolean;
-    specie_id: string;
+    specie: string;
 };
 export type Specie = {
     id: string;

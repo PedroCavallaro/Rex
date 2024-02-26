@@ -3,39 +3,68 @@ import { Specie } from "@/@types/types";
 import { Input } from "../Input";
 import { MediaPicker } from "./MediaPicker";
 import { Button } from "../Button";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { Controller, useForm } from "react-hook-form";
+import { promise, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RefObject, useRef } from "react";
 import { serverApi } from "@/lib/api";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "@/app/firebase";
+import { getUser } from "@/helpers/user";
 
 const petSchema = z.object({
     name: z.string().min(3),
     sex: z.string(),
     birthdate: z.coerce.date(),
+    file: z.any(),
     castrated: z.string(),
     specie_id: z.string().uuid(),
 });
 
-const onSubmit = async (form: HTMLFormElement) => {
-    const formData = new FormData(form);
-
-    const picture = formData.get("picture_url");
-
-    formData.append("file", picture);
-
-    await serverApi.post(
-        "pet/image",
-        {
-            formData,
-        },
-        {}
-    );
-};
-
 type FormData = z.infer<typeof petSchema>;
+const onSubmit = async ({
+    birthdate,
+    file,
+    name,
+    castrated,
+    sex,
+    specie_id,
+}: FormData) => {
+    const storageRef = ref(storage, file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    let imageUrl;
+
+    imageUrl = await new Promise((resolve, reject) => {
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {},
+            (error) => {
+                reject(error);
+            },
+            () => {
+                imageUrl = getDownloadURL(uploadTask.snapshot.ref).then((url) =>
+                    resolve(url)
+                );
+            }
+        );
+    });
+    const user = getUser();
+    await serverApi.post("pet/save", {
+        userId: user?.id,
+        pet: {
+            name,
+            sex,
+            birthdate,
+            picture_url: imageUrl,
+            castrated,
+            specie_id,
+        },
+    });
+};
 export default function PetInfo({ species }: { species: Specie[] }) {
     const {
+        control,
         handleSubmit,
         register,
         formState: { errors },
@@ -49,12 +78,19 @@ export default function PetInfo({ species }: { species: Specie[] }) {
             ref={formRef}
             className="flex gap-2 "
             onSubmit={handleSubmit((data) => {
-                onSubmit(formRef.current!);
+                onSubmit(data);
             })}
         >
             <div className="flex flex-col gap-2 ">
                 <div className="flex  gap-2">
-                    <MediaPicker />
+                    <Controller
+                        control={control}
+                        name="file"
+                        render={({ field: { onChange } }) => (
+                            <MediaPicker onChange={onChange} />
+                        )}
+                    />
+
                     <div className="flex flex-col gap-2">
                         <label htmlFor="">
                             <p>Nome</p>
