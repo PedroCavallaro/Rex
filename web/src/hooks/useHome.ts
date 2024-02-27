@@ -18,6 +18,7 @@ export function useHome() {
 
     const handlePets = useCallback(async () => {
         const res = await getPets();
+        localStorage.setItem("pets", JSON.stringify(res));
         setPets(res);
     }, []);
 

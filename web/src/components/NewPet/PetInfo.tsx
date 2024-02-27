@@ -11,6 +11,7 @@ import { serverApi } from "@/lib/api";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "@/app/firebase";
 import { getUser } from "@/helpers/user";
+import { PiPlus } from "react-icons/pi";
 
 const petSchema = z.object({
     name: z.string().min(3),
@@ -166,8 +167,36 @@ export default function PetInfo({ species }: { species: Specie[] }) {
                         </div>
                     </label>
                 </div>
-
-                <Button type="submit" text="Salvar" />
+                <div className="flex flex-col gap-4">
+                    <p className="text-xl">Vacinas</p>
+                    <div className="flex flex-col gap-4">
+                        <div className=" flex gap-2">
+                            <label htmlFor="">
+                                <input
+                                    type="text"
+                                    className="border-[1px] border-black border-opacity-35 p-2 rounded-md"
+                                />
+                            </label>
+                            <label htmlFor="">
+                                <input
+                                    type="date"
+                                    className="border-[1px] border-black border-opacity-35 p-2 rounded-md w-[9rem]"
+                                />
+                            </label>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                            <button className="p-4 bg-green-turquise rounded-lg">
+                                <PiPlus />
+                            </button>
+                            <p>Adicionar Vacina</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="absolute bottom-10 w-[95%]">
+                    <button className="w-full bg-green-turquise rounded-lg p-3 text-white">
+                        Salvar
+                    </button>
+                </div>
             </div>
         </form>
     );
